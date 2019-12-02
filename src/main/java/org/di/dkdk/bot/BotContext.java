@@ -2,7 +2,7 @@ package org.di.dkdk.bot;
 
 import org.di.dkdk.model.User;
 
-public class BotContext {
+public class BotContext {//содержит весь нужный для работы с ботом контекст
 
     private final ChatBot bot;
     private final User user;

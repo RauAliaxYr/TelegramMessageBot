@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public enum BotState {
 
-    Start {
+    Start { //Начало
         @Override
         public void enter(BotContext context) {
             sendMessage(context, "Hello");
@@ -16,7 +16,7 @@ public enum BotState {
             return EnterPhone;
         }
     },
-    EnterPhone {
+    EnterPhone {//Введите телефон
         @Override
         public void enter(BotContext context) {
             sendMessage(context, "Enter your phone");
@@ -32,13 +32,13 @@ public enum BotState {
             return EnterEmail;
         }
     },
-    EnterEmail {
+    EnterEmail {//Введите емаил
 
         private BotState next;
 
         @Override
         public void enter(BotContext context) {
-            sendMessage(context, "Enter your e-org.di.dkdk.mail");
+            sendMessage(context, "Enter your e-mail");
         }
 
         @Override
@@ -49,7 +49,7 @@ public enum BotState {
                 context.getUser().setEmail(context.getInput());
                 next = Approved;
             } else {
-                sendMessage(context, "Wrong e-org.di.dkdk.mail address");
+                sendMessage(context, "Wrong e-mail address");
                 next = EnterEmail;
             }
         }
@@ -59,7 +59,7 @@ public enum BotState {
             return next;
         }
     },
-    Approved (false){
+    Approved (false){//Спс за регистрацию
         @Override
         public void enter(BotContext context) {
             sendMessage(context,"Thank you for registration" + "\n" + "We will call you soon");
@@ -85,9 +85,9 @@ public enum BotState {
 
     public static BotState getInitialState() {
         return byId(0);
-    }
+    } // Установка состаяния в начальное
 
-    public static BotState byId(int id) {
+    public static BotState byId(int id) {// Возвращение состояния по id
         if (states == null) {
             states = BotState.values();
         }
@@ -110,11 +110,11 @@ public enum BotState {
         return inputNeeded;
     }
 
-    public void handleInput(BotContext context) {
+    public void handleInput(BotContext context) {//обрабатывает ввод пользовотеля в текущем состоянии
 
     }
 
-    public abstract void enter(BotContext context);
+    public abstract void enter(BotContext context);//войти в состояние
 
     public abstract BotState nextState();
 

@@ -46,12 +46,12 @@ public class ChatBot extends TelegramLongPollingBot {
 
         User user = userService.findByChatId(chatId);
 
-        if (checkIfAdminCommand(user, text))
+        if (checkIfAdminCommand(user, text)) // проверяем не одминская ли команда
             return;
         BotContext context;
         BotState state;
 
-        if (user == null) {
+        if (user == null) { //если юзера ещё нет в базе
             state = BotState.getInitialState();
 
             user = new User(chatId, state.ordinal());
@@ -61,15 +61,16 @@ public class ChatBot extends TelegramLongPollingBot {
             state.enter(context);
 
             LOGGER.info("New User " + chatId);
-        } else {
+        } else { //если юзер уже есть в базе определяем его состояние
             context = BotContext.of(this, user, text);
             state = BotState.byId(user.getStateId());
 
             LOGGER.info("Update user " + state);
         }
-
+        //определяем введённое сообщение как ответ на вопрос
         state.handleInput(context);
 
+        //переходим в следующее состояние и сохраняем
         do {
             state = state.nextState();
             state.enter(context);
@@ -84,14 +85,14 @@ public class ChatBot extends TelegramLongPollingBot {
     private boolean checkIfAdminCommand(User user, String text) {
         if (user == null || !user.getAdmin())
             return false;
-        if (text.startsWith(BROADCAST)) {
+        if (text.startsWith(BROADCAST)) { //рассылаем всем сообщение
             LOGGER.info("Admin  command received " + BROADCAST);
 
             text = text.substring(BROADCAST.length());
             broadcast(text);
 
             return true;
-        } else if (text.startsWith(LIST_USERS)) {
+        } else if (text.startsWith(LIST_USERS)) {//показывает список юзеров
             LOGGER.info("Admin  command received " + LIST_USERS);
 
             listUsers(user);

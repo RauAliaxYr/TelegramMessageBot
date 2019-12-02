@@ -33,7 +33,7 @@ public class NotificationService {
         this.mailSender = mailSender;
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 10000)//каждые 10 сек проверяет есть ли новые пользователи и отправляет данные о них на емаил
     public void sendNewApplications() {
         List<User> users = userService.findNewUsers();
         if (users.size() == 0)
